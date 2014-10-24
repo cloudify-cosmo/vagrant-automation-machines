@@ -36,8 +36,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :softlayer do |sl|
     sl.api_key  = configs['softlayer']['apiKey']
-    sl.username = configs['username']
-    sl.ssh_key  = configs['sshKey']
+    sl.username = configs['softlayer']['username']
+    sl.ssh_key  = configs['softlayer']['sshKey']
 
     sl.vm.synced_folder "../synced_folder", "/vagrant_data"
 
