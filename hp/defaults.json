@@ -1,0 +1,18 @@
+{
+    "hp" : {
+        "accessKey" : "__accessKey__",
+        "secretKey" : "__secretKey__",
+        "flavor" : "standard.medium",
+        "tenantId" : "__tenantId__",
+        "serverName" : "hp-automation-server",
+        "image" : "Ubuntu Precise 12.04.4 LTS Server 64-bit 20140414 (Rescue Image)",
+        "keypairName" : "hpAutomationKeypair",
+        "availabilityZone" : "az1",
+        "ssh" : {
+            "username" : "ubuntu",
+            "privateKeyPath" : "/etc/automations/hpAutomationKeypair"
+        }
+
+
+    }
+}

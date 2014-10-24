@@ -1,0 +1,52 @@
+# https://github.com/mitchellh/vagrant-aws
+# vagrant plugin install vagrant-aws
+# vagrant up --provider=aws
+
+
+
+require 'yaml'
+CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!!
+
+unless CONFIG_FILE
+  abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
+end
+
+defaults = YAML.load_file("#{File.dirname(File.expand_path(__FILE__))}/defaults.json")
+configs = YAML.load_file("#{CONFIG_FILE}")
+
+# http://stackoverflow.com/a/9381776/1068746
+class ::Hash
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end
+
+
+configs = defaults.deep_merge(configs)
+
+
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "aws-box"
+  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = configs['aws']['accessKey']
+    aws.secret_access_key = configs['aws']['secreatAccessKey']
+    aws.keypair_name = configs['aws']['keypairName']
+
+    aws.ami = configs['aws']['ami']
+
+    override.ssh.username = configs['aws']['ssh']['username']
+    override.ssh.private_key_path = configs['aws']['ssh']['privateKeyPath']
+
+    aws.vm.synced_folder "../synced_folder", "/vagrant_data"
+
+    aws.vm.provision "shell" do |s|
+      s.path = "../provision.sh"
+      s.privileged = false
+    end
+  end
+end

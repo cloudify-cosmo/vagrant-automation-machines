@@ -1,0 +1,50 @@
+# https://github.com/audiolize/vagrant-softlayer
+# vagrant plugin install vagrant-softlayer
+# vagrant up --provider=softlayer
+
+
+############### WHERE IS THE BOX!!!?!?!?!?
+
+############## You need to make it!! Please follow https://github.com/audiolize/vagrant-softlayer/tree/master/example_box
+############## which is an example to the most basic box ever..
+
+
+require 'yaml'
+CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!!
+
+unless CONFIG_FILE
+  abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
+end
+
+defaults = YAML.load_file("#{File.dirname(File.expand_path(__FILE__))}/defaults.json")
+configs = YAML.load_file("#{CONFIG_FILE}")
+
+# http://stackoverflow.com/a/9381776/1068746
+class ::Hash
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end
+
+configs = defaults.deep_merge(configs)
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "hp-box"
+  # config.vm.box_url = "THERE IS NO SUCH BOX AT THE MOMENT OF WRITING IT!!!"
+
+  config.vm.provider :softlayer do |sl|
+    sl.api_key  = configs['softlayer']['apiKey']
+    sl.username = configs['username']
+    sl.ssh_key  = configs['sshKey']
+
+    sl.vm.synced_folder "../synced_folder", "/vagrant_data"
+
+    sl.vm.provision "shell" do |s|
+      s.path = "../provision.sh"
+      s.privileged = false
+    end
+
+  end
+end

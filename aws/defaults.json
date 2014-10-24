@@ -1,0 +1,12 @@
+{
+    "aws" : {
+        "accessKey" : "__accessKey__",
+        "secretAccessKey" : "__secretAccessKey__",
+        "keypairName" : "awsAutomationKeypair",
+        "ami" : "ami-7747d01e",
+        "ssh" : {
+            "username" : "ubuntu",
+            "privateKeyPath" : "/etc/automations/awsAutomationKeypair"
+        }
+    }
+}

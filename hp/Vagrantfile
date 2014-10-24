@@ -1,0 +1,54 @@
+# https://github.com/mohitsethi/vagrant-hp
+# vagrant plugin install vagrant-hp
+# vagrant up --provider=hp
+
+
+require 'yaml'
+CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!!
+
+unless CONFIG_FILE
+  abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
+end
+
+defaults = YAML.load_file("#{File.dirname(File.expand_path(__FILE__))}/defaults.json")
+configs = YAML.load_file("#{CONFIG_FILE}")
+
+# http://stackoverflow.com/a/9381776/1068746
+class ::Hash
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end
+
+
+configs = defaults.deep_merge(configs)
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "hp-box"
+  config.vm.box_url = "https://github.com/mohitsethi/vagrant-hp/raw/master/dummy_hp.box"
+
+
+  config.vm.provider :hp do |hp|
+    hp.access_key = configs['hp']['accessKey']
+    hp.secret_key = configs['hp']['secretKey']
+    hp.flavor = configs['hp']['flavor']
+    hp.tenant_id = configs['hp']['tenantId']
+    hp.server_name = configs['hp']['serverName']
+    hp.image = configs['hp']['image']
+    hp.keypair_name = configs['hp']['keypairName']
+    hp.ssh_private_key_path = configs['hp']['ssh']['privateKeyPath']
+    hp.ssh_username = configs['hp']['ssh']['username']
+    hp.availability_zone = "az1"
+
+    hp.vm.synced_folder "../synced_folder", "/vagrant_data"
+
+    hp.vm.provision "shell" do |s|
+      s.path = "../provision.sh"
+      s.privileged = false
+    end
+
+  end
+
+end
