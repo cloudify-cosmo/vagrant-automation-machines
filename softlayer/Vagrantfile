@@ -31,7 +31,7 @@ configs = defaults.deep_merge(configs)
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "hp-box"
+  config.vm.box = "softlayer-box"
   # config.vm.box_url = "THERE IS NO SUCH BOX AT THE MOMENT OF WRITING IT!!!"
 
   config.vm.provider :softlayer do |sl|
