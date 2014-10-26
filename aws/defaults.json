@@ -6,7 +6,7 @@
         "ami" : "ami-7747d01e",
         "ssh" : {
             "username" : "ubuntu",
-            "privateKeyPath" : "/etc/automations/awsAutomationKeypair"
+            "privateKeyPath" : "/etc/automations/awsAutomationKeypair.pem"
         }
     }
 }
