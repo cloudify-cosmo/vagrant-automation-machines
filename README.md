@@ -7,7 +7,7 @@ a boiler plate for automations relying on vagrant. simply clone and add files to
 
 # How to use 
 
-In you automation do the following 
+In your automation do the following 
 
  - Write a YAML/JSON configuration file and place it on your machine
     - The configuration file should follow the specific vagrant file's requirements. 

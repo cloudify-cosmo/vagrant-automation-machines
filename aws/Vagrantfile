@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
     override.ssh.username = configs['aws']['ssh']['username']
     override.ssh.private_key_path = configs['aws']['ssh']['privateKeyPath']
 
-    aws.vm.synced_folder "../synced_folder", "/vagrant_data"
+    aws.vm.synced_folder "../synced_folder"
 
     aws.vm.provision "shell" do |s|
       s.path = "../provision.sh"
