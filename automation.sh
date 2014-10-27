@@ -9,9 +9,7 @@ if [ -f $HOOK_FILE ]
 fi
 
 pushd $CLOUD_FOLDER
-vagrant up --provider $VAGRANT_PROVIDER
-vagrant rsync
-vagrant provision
+vagrant up --provider $VAGRANT_PROVIDER --provision
 vagrant destroy
 
 HOOK_FILE=post_vagrant_hook.sh
