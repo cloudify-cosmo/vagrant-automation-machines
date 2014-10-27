@@ -46,6 +46,10 @@ Vagrant.configure("2") do |config|
 
     aws.ami = configs['aws']['ami']
 
+    aws.tags = {
+        'Name' => configs['aws']['machineName']
+    }
+
     override.ssh.username = configs['aws']['ssh']['username']
     override.ssh.private_key_path = configs['aws']['ssh']['privateKeyPath']
 
