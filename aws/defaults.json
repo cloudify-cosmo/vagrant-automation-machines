@@ -4,6 +4,7 @@
         "secretAccessKey" : "__secretAccessKey__",
         "keypairName" : "awsAutomationKeypair",
         "ami" : "ami-7747d01e",
+        "instanceType" : "m3.medium",
         "region" : "us-east-1",
         "machineName" : "aws-vagrant-machine",
         "ssh" : {
