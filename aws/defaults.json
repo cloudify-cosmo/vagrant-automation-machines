@@ -4,6 +4,7 @@
         "secretAccessKey" : "__secretAccessKey__",
         "keypairName" : "awsAutomationKeypair",
         "ami" : "ami-7747d01e",
+        "region" : "us-east-1",
         "machineName" : "aws-vagrant-machine",
         "ssh" : {
             "username" : "ubuntu",
