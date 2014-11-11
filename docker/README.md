@@ -2,8 +2,6 @@
 
 This implementation is from: https://github.com/bubenkoff/vagrant-docker-example
 
-Thank you so very much for helping us resolve the annoying
-
 # Requirements
 
 ## Docker
