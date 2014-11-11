@@ -7,6 +7,15 @@ a boiler plate for automations relying on vagrant. simply clone and add files to
 
 # How to use 
 
+___Make Sure To Install The Plugin For Each Cloud___
+
+Before you start, go into the vagrant file you plan to use and look at the top. 
+
+We document the plugin you need to install before you can run `vagrant up`. 
+
+Don't miss this step or you will not succeed. 
+
+___Usage Steps___
 In your automation do the following 
 
  - Write a YAML/JSON configuration file and place it on your machine
@@ -29,11 +38,11 @@ If you followed the instructions correctly, you should have the following folder
  + ------ synced_folder // files to be synced should be here
  + ------ provision.sh // this is a file you placed here.. 
  + ------ configurations
-                 + ---------- ec2-aws/Vagrantfile
+                 + ---------- aws/Vagrantfile
                  + ---------- hp/Vagrantfile
                  + ---------- softlayer/Vagrantfile
                  ...
- + /etc/sysconfig/ec2-aws.json // configuration file to ec2-aws/Vagrantfile
+ + /etc/sysconfig/aws.json // configuration file to ec2-aws/Vagrantfile
  + /etc/sysconfig/hp.json      // configuration file to hp/Vagrantfile
  ... 
 ```
