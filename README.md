@@ -3,10 +3,13 @@ vagrant-automation-machines
 
 a boiler plate for automations relying on vagrant. simply clone and add files to "synced_folder" and a provision script..
 
- # Features
+### Features
 
-  - external configuration
-  - environment variables support
+ - support for aws, hp, docker, softlayer
+ - synced folder - from host to guest machine
+ - external configuration
+ - environment variables support
+ - copy files from guest to host
 
 
 
@@ -118,3 +121,13 @@ To support other environments, you can simply write
 ```
 source /vagrant/ENVIRONMENT_VARIABLES.sh || echo "no environment variables file.. skipping.. "
 ```
+
+## How to copy files from guest to host
+
+Based on [this gist](https://gist.github.com/geedew/11289350) we wrote a script to copy files back from the guest machine to the host machine. You can run it simply by writing 
+
+```
+pull_from_guest.sh /path/to/destination
+```
+
+and it will copy all files from guest at /vagrant_pull to the destination folder you chose
