@@ -25,11 +25,21 @@ end
 
 configs = defaults.deep_merge(configs)
 
+environment_provision_script = "echo \""
+
+if configs.has_key?("environmentVariables")
+  configs['environmentVariables'].each { |k, v|  environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
+end
+
+environment_provision_script = environment_provision_script + "\" > /vagrant/ENVIRONMENT_VARIABLES.sh"
+
 
 
 Vagrant.configure("2") do |config|
 
   config.vm.synced_folder "../synced_folder", "/vagrant"
+
+  config.vm.provision "shell", inline: environment_provision_script
 
   config.vm.provision "shell" do |s|
 

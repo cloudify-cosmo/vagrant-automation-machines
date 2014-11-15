@@ -24,11 +24,28 @@ end
 
 configs = defaults.deep_merge(configs)
 
+environment_provision_script = "echo \""
+
+if configs.has_key?("environmentVariables")
+  configs['environmentVariables'].each { |k, v|  environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
+end
+
+environment_provision_script = environment_provision_script + "\" > /vagrant/ENVIRONMENT_VARIABLES.sh"
+
+
 Vagrant.configure("2") do |config|
 
   config.vm.box = "hp-box"
   config.vm.box_url = "https://github.com/mohitsethi/vagrant-hp/raw/master/dummy_hp.box"
 
+  config.vm.synced_folder "../synced_folder", "/vagrant"
+
+  config.vm.provision "shell", inline: environment_provision_script
+
+  config.vm.provision "shell" do |s|
+    s.path = "../provision.sh"
+    s.privileged = false
+  end
 
   config.vm.provider :hp do |hp|
     hp.access_key = configs['hp']['accessKey']
@@ -42,12 +59,9 @@ Vagrant.configure("2") do |config|
     hp.ssh_username = configs['hp']['ssh']['username']
     hp.availability_zone = "az1"
 
-    hp.vm.synced_folder "../synced_folder"
 
-    hp.vm.provision "shell" do |s|
-      s.path = "../provision.sh"
-      s.privileged = false
-    end
+
+
 
   end
 
