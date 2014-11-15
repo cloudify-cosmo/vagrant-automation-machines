@@ -3,7 +3,7 @@
 ## use this script by going to a folder and running ../pull_from_guest.sh /path/to/output
 
 if [ "$1" = "" ];then
-    echo "must specify destination folder. pull_from_guest.sh <destination_folder>
+    echo "must specify destination folder. pull_from_guest.sh <destination_folder>"
     exit 1
 fi
 
