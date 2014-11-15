@@ -1,7 +1,12 @@
 vagrant-automation-machines
 ===========================
 
-a boiler plate for automations relying on vagrant. simply clone and add files to "synced_folder" and a provision script.. 
+a boiler plate for automations relying on vagrant. simply clone and add files to "synced_folder" and a provision script..
+
+ # Features
+
+  - external configuration
+  - environment variables support
 
 
 
@@ -73,3 +78,43 @@ Sometimes there will be things you need to do right before vagrant runs, and thi
  - since this file is in synced_folder, the provision script can reference it under /vagrant_data
  - the provision script can easily use this file to know how to encrypt/decrypt files by running `source /vagrant_data/encrypt_key.sh`
  - once vagrant is done, you will want to delete this key by simply running `rm -rf synced_folder/encrypt_key.sh`
+
+
+## Environment Variables Feature
+
+Vagrant does not allow you to define environment variables in guest machine.
+
+However, if you define `environmentVariable` in the configuration file, we will pass all keys & values to a file under `/vagrant/ENVIRONMENT_VARIABLES.sh`.
+
+So for example if my configuration file includes:
+
+```
+{
+    "environmentVariables": {
+        "MY_KEY":"My Value"
+    }
+}
+
+```
+
+Then in the guest machine you will have a file `/vagrant/ENVIRONMENT_VARIABLES.sh` that contains the following content
+
+```
+MY_KEY="My Value"
+```
+
+In case you did not define any environment variables, this file will still exist but only empty.
+
+So now, in your script, you can easily add the following lines of code
+
+```
+source /vagrant/ENVIRONMENT_VARIABLES.sh
+```
+
+To consume the environment variables you wanted.
+
+To support other environments, you can simply write
+
+```
+source /vagrant/ENVIRONMENT_VARIABLES.sh || echo "no environment variables file.. skipping.. "
+```
