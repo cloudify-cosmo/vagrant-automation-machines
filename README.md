@@ -10,6 +10,7 @@ a boiler plate for automations relying on vagrant. simply clone and add files to
  - external configuration
  - environment variables support
  - copy files from guest to host
+ - ip resolution
 
 
 
@@ -127,7 +128,19 @@ source /etc/ENVIRONMENT_VARIABLES.sh || echo "no environment variables file.. sk
 Based on [this gist](https://gist.github.com/geedew/11289350) we wrote a script to copy files back from the guest machine to the host machine. You can run it simply by writing 
 
 ```
-pull_from_guest.sh /path/to/destination
+../pull_from_guest.sh /path/to/destination
 ```
 
 and it will copy all files from guest at /vagrant_pull to the destination folder you chose
+
+please note you need to run this script from the same folder you ran `vagrant up`
+
+## IP resolution
+
+if you want to know the IP address for the machine you got, you can simply run script 
+
+```
+../get_ip.sh
+```
+
+please note you need to run this script from the same folder you ran `vagrant up`
