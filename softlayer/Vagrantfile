@@ -35,7 +35,7 @@ if configs.has_key?("environmentVariables")
   configs['environmentVariables'].each { |k, v|  environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
 end
 
-environment_provision_script = environment_provision_script + "\" > /vagrant/ENVIRONMENT_VARIABLES.sh"
+environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
 
 
 Vagrant.configure("2") do |config|

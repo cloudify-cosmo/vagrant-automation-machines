@@ -7,7 +7,7 @@ This implementation is from: https://github.com/bubenkoff/vagrant-docker-example
 ## Docker
 
  * You have to install docker. We used http://get.docker.io/ so we recommend this.
- * you need to add an imagw
+ * you need to add an image
  * Afterwards, to test your docker is working right, use `sudo docker run ubuntu`
  * then you can create an ubuntu container by simply running without vagrant `sudo docker run -t -i ubuntu /bin/bash`
 
