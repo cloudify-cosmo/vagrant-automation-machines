@@ -33,6 +33,16 @@ end
 
 environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
 
+#:rsync_excludes => ['chef/tmp', 'tmp']
+excludes_array = ['.git','_site']
+begin
+  excludes_array = IO.readlines("../synced_folder/.vagrantignore")
+rescue
+  puts 'vagrant ignore does not exist. moving on..'
+end
+puts "the following files will be ignored by rsync #{excludes_array}"
+
+
 
 
 Vagrant.configure("2") do |config|
@@ -40,7 +50,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "aws-box"
   config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
-  config.vm.synced_folder "../synced_folder", "/vagrant"
+  config.vm.synced_folder "../synced_folder", "/vagrant", type: "rsync", rsync__exclude: excludes_array
 
   config.vm.provision "shell", inline: environment_provision_script
 
