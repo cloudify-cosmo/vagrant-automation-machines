@@ -144,3 +144,18 @@ if you want to know the IP address for the machine you got, you can simply run s
 ```
 
 please note you need to run this script from the same folder you ran `vagrant up`
+
+# Configurable rsync excludes
+
+Our project makes it even easier to exclude files from rsync.
+
+By default, we ignore `.git` and `_site` folders.
+
+If you want to configure the excludes, simply add a `.vagrantignore` file in your `synced_folder`
+
+each line is a new entry for excludes.
+
+Good to know - our project makes it seamless on what provider you are running. While on AWS plugin
+the `excludes` parameter is different - but you don't have to worry about it.  [excludes with a single underscore character instead of two underscores like everyone else](https://github.com/mitchellh/vagrant-aws/issues/152)
+
+
