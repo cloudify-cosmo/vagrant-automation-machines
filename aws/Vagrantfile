@@ -37,10 +37,12 @@ environment_provision_script = environment_provision_script + "\" > /etc/ENVIRON
 excludes_array = ['.git','_site']
 begin
   excludes_array = IO.readlines("../synced_folder/.vagrantignore")
+  excludes_array.collect { |x| x.strip! }
 rescue
-  puts 'vagrant ignore does not exist. moving on..'
+  puts '.vagrantignore does not exist. moving on..'
 end
 puts "the following files will be ignored by rsync #{excludes_array}"
+puts "see https://docs.vagrantup.com/v2/synced-folders/rsync.html for recommended list of ignore items"
 
 
 
@@ -50,7 +52,9 @@ Vagrant.configure("2") do |config|
   config.vm.box = "aws-box"
   config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
-  config.vm.synced_folder "../synced_folder", "/vagrant", type: "rsync", rsync__exclude: excludes_array
+  # please note - in aws provider the flag is NOT rsync__exclude but instead rsync_exclude (single underscore, not double)
+  # https://github.com/mitchellh/vagrant-aws/pull/156
+  config.vm.synced_folder "../synced_folder", "/vagrant", type: "rsync", rsync_exclude: excludes_array
 
   config.vm.provision "shell", inline: environment_provision_script
 

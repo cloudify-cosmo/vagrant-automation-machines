@@ -41,3 +41,37 @@ this means you are lacking `/tmp` folder permissions and you should do
 sudo chmod 1777 /tmp
 ```
 
+## detaching from container
+
+```
+docker run -it ubuntu
+^P^Q
+docker attach [container_id]
+```
+
+## other helpful commands
+
+Show all containers - also those you stopped
+```
+docker ps -a
+```
+
+Rerun a stopped container
+```
+docker start [container instance]
+```
+
+list all containers ID
+```
+docker ps -a -q
+```
+
+Delete all stopped containers
+```
+docker rm $(docker ps -a -q)
+```
+
+Start docker container with port forwarding
+```
+docker run -p 8080:8080 ubuntu
+```

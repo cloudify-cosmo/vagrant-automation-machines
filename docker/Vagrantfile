@@ -52,6 +52,10 @@ Vagrant.configure("2") do |config|
   ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
 
   config.vm.provider :docker do |docker, override|
+
+    # todo: add port forwarding
+    #  http://stackoverflow.com/questions/23530299/how-to-map-docker-ports-using-vagrant-1-6-and-the-docker-provider
+
     docker.build_dir = configs['docker']['buildDir']
     docker.has_ssh = true
   end
