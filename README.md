@@ -88,7 +88,7 @@ Sometimes there will be things you need to do right before vagrant runs, and thi
 
 Vagrant does not allow you to define environment variables in guest machine.
 
-However, if you define `environmentVariable` in the configuration file, we will pass all keys & values to a file under `/vagrant/ENVIRONMENT_VARIABLES.sh`.
+However, if you define `environmentVariable` in the configuration file, we will pass all keys & values to a file under `/etc/ENVIRONMENT_VARIABLES.sh`.
 
 So for example if my configuration file includes:
 
@@ -101,7 +101,7 @@ So for example if my configuration file includes:
 
 ```
 
-Then in the guest machine you will have a file `/vagrant/ENVIRONMENT_VARIABLES.sh` that contains the following content
+Then in the guest machine you will have a file `/etc/ENVIRONMENT_VARIABLES.sh` that contains the following content
 
 ```
 MY_KEY="My Value"
@@ -112,7 +112,7 @@ In case you did not define any environment variables, this file will still exist
 So now, in your script, you can easily add the following lines of code
 
 ```
-source /vagrant/ENVIRONMENT_VARIABLES.sh
+source /etc/ENVIRONMENT_VARIABLES.sh
 ```
 
 To consume the environment variables you wanted.
@@ -120,7 +120,7 @@ To consume the environment variables you wanted.
 To support other environments, you can simply write
 
 ```
-source /vagrant/ENVIRONMENT_VARIABLES.sh || echo "no environment variables file.. skipping.. "
+source /etc/ENVIRONMENT_VARIABLES.sh || echo "no environment variables file.. skipping.. "
 ```
 
 ## How to copy files from guest to host
@@ -144,3 +144,18 @@ if you want to know the IP address for the machine you got, you can simply run s
 ```
 
 please note you need to run this script from the same folder you ran `vagrant up`
+
+# Configurable rsync excludes
+
+Our project makes it even easier to exclude files from rsync.
+
+By default, we ignore `.git` and `_site` folders.
+
+If you want to configure the excludes, simply add a `.vagrantignore` file in your `synced_folder`
+
+each line is a new entry for excludes.
+
+Good to know - our project makes it seamless on what provider you are running. While on AWS plugin
+the `excludes` parameter is different - but you don't have to worry about it.  [excludes with a single underscore character instead of two underscores like everyone else](https://github.com/mitchellh/vagrant-aws/issues/152)
+
+

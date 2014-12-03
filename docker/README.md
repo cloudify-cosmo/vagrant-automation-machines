@@ -7,7 +7,7 @@ This implementation is from: https://github.com/bubenkoff/vagrant-docker-example
 ## Docker
 
  * You have to install docker. We used http://get.docker.io/ so we recommend this.
- * you need to add an imagw
+ * you need to add an image
  * Afterwards, to test your docker is working right, use `sudo docker run ubuntu`
  * then you can create an ubuntu container by simply running without vagrant `sudo docker run -t -i ubuntu /bin/bash`
 
@@ -41,3 +41,37 @@ this means you are lacking `/tmp` folder permissions and you should do
 sudo chmod 1777 /tmp
 ```
 
+## detaching from container
+
+```
+docker run -it ubuntu
+^P^Q
+docker attach [container_id]
+```
+
+## other helpful commands
+
+Show all containers - also those you stopped
+```
+docker ps -a
+```
+
+Rerun a stopped container
+```
+docker start [container instance]
+```
+
+list all containers ID
+```
+docker ps -a -q
+```
+
+Delete all stopped containers
+```
+docker rm $(docker ps -a -q)
+```
+
+Start docker container with port forwarding
+```
+docker run -p 8080:8080 ubuntu
+```

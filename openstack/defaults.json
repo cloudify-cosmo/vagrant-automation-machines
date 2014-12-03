@@ -2,7 +2,7 @@
 
     "openstack" : {
        "openstack_auth_url" : "url",
-        "username" : "",
+        "username" : "user_name",
         "password" : "",
         "tenant_name" : "",
         "flavor" : "",
