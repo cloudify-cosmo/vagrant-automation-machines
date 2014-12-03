@@ -1,0 +1,18 @@
+{
+
+    "openstack" : {
+       "openstack_auth_url" : "",
+        "username" : "",
+        "password" : "",
+        "tenant_name" : "",
+        "flavor" : "",
+        "image" : "",
+        "floating_ip_pool" : "",
+        "ssh" : {
+            "username" : ""}
+
+
+
+    }
+}
+

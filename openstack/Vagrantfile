@@ -1,0 +1,73 @@
+# https://github.com/cloudbau/vagrant-openstack-plugin.git
+# vagrant plugin install vagrant-openstack-plugin
+# vagrant up --provider=openstack
+
+
+
+require 'yaml'
+
+CONFIG_FILE = '/home/liron/dev/Play_Projects/vagrant-automation-machines/openstack/defaults.json' # supports JSON!!!!
+
+unless CONFIG_FILE
+  abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
+end
+
+defaults = YAML.load_file("#{File.dirname(File.expand_path(__FILE__))}/defaults.json")
+configs = YAML.load_file("#{CONFIG_FILE}")
+
+# http://stackoverflow.com/a/9381776/1068746
+class ::Hash
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end
+
+
+configs = defaults.deep_merge(configs)
+
+environment_provision_script = "echo \""
+
+if configs.has_key?("environmentVariables")
+  configs['environmentVariables'].each { |k, v|  environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
+end
+
+environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
+
+puts "this is environment provision script #{environment_provision_script}"
+
+
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "openstack-box"
+  config.vm.box_url = "https://github.com/cloudbau/vagrant-openstack-plugin/raw/master/dummy.box"
+
+  config.vm.synced_folder "../synced_folder", "/vagrant"
+
+  config.vm.provision "shell", inline: environment_provision_script
+
+  config.vm.provision "shell" do |s|
+    s.path = "../provision.sh"
+    s.privileged = false
+  end
+
+
+  config.vm.provider :openstack do |openstack|
+    openstack.openstack_auth_url  = configs['openstack']['openstack_auth_url']
+    openstack.username  = configs['openstack']['username']
+    openstack.password  = configs['openstack']['password']
+    openstack.tenant_name  = configs['openstack']['tenant_name']
+    openstack.flavor  = configs['openstack']['flavor']
+    openstack.image  = configs['openstack']['image']
+    openstack.floating_ip_pool  = configs['openstack']['floating_ip_pool']
+    openstack.ssh_username = configs['openstack']['ssh']['username']
+
+
+
+
+  end
+
+  end
+
+
