@@ -46,6 +46,7 @@ puts "see https://docs.vagrantup.com/v2/synced-folders/rsync.html for recommende
 
 
 
+
 Vagrant.configure("2") do |config|
 
   config.vm.box = "aws-box"
