@@ -32,6 +32,16 @@ end
 
 environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
 
+#:rsync_excludes => ['chef/tmp', 'tmp']
+excludes_array = ['.git','_site']
+begin
+  excludes_array = IO.readlines("../synced_folder/.vagrantignore")
+  excludes_array.collect { |x| x.strip! }
+rescue
+  puts '.vagrantignore does not exist. moving on..'
+end
+puts "the following files will be ignored by rsync #{excludes_array}"
+puts "see https://docs.vagrantup.com/v2/synced-folders/rsync.html for recommended list of ignore items"
 
 Vagrant.configure("2") do |config|
 
@@ -58,10 +68,6 @@ Vagrant.configure("2") do |config|
     hp.ssh_private_key_path = configs['hp']['ssh']['privateKeyPath']
     hp.ssh_username = configs['hp']['ssh']['username']
     hp.availability_zone = "az1"
-
-
-
-
 
   end
 

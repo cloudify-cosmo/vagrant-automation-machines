@@ -6,7 +6,7 @@
 
 require 'yaml'
 
-CONFIG_FILE = '/home/liron/dev/Play_Projects/vagrant-automation-machines/openstack/defaults.json' # supports JSON!!!!
+CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!
 
 unless CONFIG_FILE
   abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
@@ -36,6 +36,16 @@ environment_provision_script = environment_provision_script + "\" > /etc/ENVIRON
 
 puts "this is environment provision script #{environment_provision_script}"
 
+#:rsync_excludes => ['chef/tmp', 'tmp']
+excludes_array = ['.git','_site']
+begin
+  excludes_array = IO.readlines("../synced_folder/.vagrantignore")
+  excludes_array.collect { |x| x.strip! }
+rescue
+  puts '.vagrantignore does not exist. moving on..'
+end
+puts "the following files will be ignored by rsync #{excludes_array}"
+puts "see https://docs.vagrantup.com/v2/synced-folders/rsync.html for recommended list of ignore items"
 
 
 Vagrant.configure("2") do |config|
@@ -53,6 +63,7 @@ Vagrant.configure("2") do |config|
   end
 
 
+
   config.vm.provider :openstack do |openstack|
     openstack.openstack_auth_url  = configs['openstack']['openstack_auth_url']
     openstack.username  = configs['openstack']['username']
@@ -61,7 +72,10 @@ Vagrant.configure("2") do |config|
     openstack.flavor  = configs['openstack']['flavor']
     openstack.image  = configs['openstack']['image']
     openstack.floating_ip_pool  = configs['openstack']['floating_ip_pool']
-    openstack.ssh_username = configs['openstack']['ssh']['username']
+    config.ssh.username = configs['openstack']['ssh']['username']
+    config.ssh.private_key_path = configs['openstack']['ssh']['private_key_path']
+    openstack.keypair_name = configs['openstack']['keypair_name']
+    openstack.networks = configs['openstack']['networks']
 
 
 

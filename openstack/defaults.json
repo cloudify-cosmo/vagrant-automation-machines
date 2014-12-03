@@ -9,10 +9,12 @@
         "image" : "",
         "floating_ip_pool" : "",
         "ssh" : {
-            "username" : ""}
+            "username" : "ubuntu",
+            "private_key_path" : "/home/liron/dev/Play_Projects/vagrant-automation-machines/dev/liron-ui.pem"
 
-
-
+        },
+        "networks" : [""],
+        "keypair_name": ""
     }
-}
 
+}
