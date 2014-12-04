@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "hp-box"
   config.vm.box_url = "https://github.com/mohitsethi/vagrant-hp/raw/master/dummy_hp.box"
 
-  config.vm.synced_folder "../synced_folder", "/vagrant"
+  config.vm.synced_folder "../synced_folder", "/vagrant", type: "rsync", rsync__exclude: excludes_array
 
   config.vm.provision "shell", inline: environment_provision_script
 

@@ -47,7 +47,7 @@ puts "see https://docs.vagrantup.com/v2/synced-folders/rsync.html for recommende
 
 Vagrant.configure("2") do |config|
 
-  config.vm.synced_folder "../synced_folder", "/vagrant"
+  config.vm.synced_folder "../synced_folder", "/vagrant", type: "rsync", rsync__exclude: excludes_array
 
   config.vm.provision "shell", inline: environment_provision_script
 
