@@ -1,5 +1,5 @@
 # https://github.com/cloudbau/vagrant-openstack-plugin.git
-# vagrant plugin install vagrant-openstack-plugin
+# vagrant plugin install vagrant-openstack-provider
 # vagrant up --provider=openstack
 
 
