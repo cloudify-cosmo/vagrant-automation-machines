@@ -2,3 +2,4 @@
 .vagrant
 dev
 provision.sh
+synced_folder
