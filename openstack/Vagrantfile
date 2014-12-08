@@ -70,6 +70,7 @@ Vagrant.configure("2") do |config|
     openstack.password  = configs['openstack']['password']
     openstack.tenant_name  = configs['openstack']['tenant_name']
     openstack.flavor  = configs['openstack']['flavor']
+    openstack.server_name = configs['openstack']['machineName']
     openstack.image  = configs['openstack']['image']
     openstack.floating_ip_pool  = configs['openstack']['floating_ip_pool']
     config.ssh.username = configs['openstack']['ssh']['username']

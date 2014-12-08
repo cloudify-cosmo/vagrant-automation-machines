@@ -6,6 +6,7 @@
         "password" : "passwd",
         "tenant_name" : "",
         "flavor" : "",
+        "machineName" : "vagrant-automation",
         "image" : "",
         "floating_ip_pool" : "",
         "ssh" : {
