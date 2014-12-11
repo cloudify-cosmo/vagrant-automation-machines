@@ -67,7 +67,6 @@ fi
 # export DISPLAY=:0.0 # so that the browsers will identify xfce as the display
 
 # # If you are not using GUI (the startxfce4 above), uncomment this block to simulate a displat for chrome
-cd /vagrant
 echo "### Starting Xvfb ... ###"
 export DISPLAY=:10
 echo "export DISPLAY=:10" > /home/ubuntu/.bashrc

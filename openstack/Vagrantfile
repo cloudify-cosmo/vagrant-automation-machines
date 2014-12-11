@@ -2,67 +2,29 @@
 # vagrant plugin install vagrant-openstack-provider
 # vagrant up --provider=openstack
 
-
-
-require 'yaml'
+require_relative '../util/util'
 
 CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!
 
-unless CONFIG_FILE
-  abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
-end
+config = Util.new
+cloudname = 'openstack'
+configs = config.getConfigs(CONFIG_FILE, cloudname)
 
-defaults = YAML.load_file("#{File.dirname(File.expand_path(__FILE__))}/defaults.json")
-configs = YAML.load_file("#{CONFIG_FILE}")
+environment_provision_script = config.initEnvironmentProvision(configs)
 
-# http://stackoverflow.com/a/9381776/1068746
-class ::Hash
-  def deep_merge(second)
-    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
-    self.merge(second, &merger)
-  end
-end
-
-
-configs = defaults.deep_merge(configs)
-
-environment_provision_script = "echo \""
-
-if configs.has_key?("environmentVariables")
-  configs['environmentVariables'].each { |k, v|  environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
-end
-
-environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
-
-puts "this is environment provision script #{environment_provision_script}"
-
-#:rsync_excludes => ['chef/tmp', 'tmp']
 excludes_array = ['.git','_site']
-begin
-  excludes_array = IO.readlines("../synced_folder/.vagrantignore")
-  excludes_array.collect { |x| x.strip! }
-rescue
-  puts '.vagrantignore does not exist. moving on..'
-end
-puts "the following files will be ignored by rsync #{excludes_array}"
-puts "see https://docs.vagrantup.com/v2/synced-folders/rsync.html for recommended list of ignore items"
-
+config.setVagrantignore(excludes_array)
 
 Vagrant.configure("2") do |config|
 
   config.vm.box = "openstack-box"
   config.vm.box_url = "https://github.com/cloudbau/vagrant-openstack-plugin/raw/master/dummy.box"
-
   config.vm.synced_folder "../synced_folder", "/vagrant", type: "rsync", rsync__exclude: excludes_array
-
   config.vm.provision "shell", inline: environment_provision_script
-
   config.vm.provision "shell" do |s|
     s.path = "../provision.sh"
     s.privileged = false
   end
-
-
 
   config.vm.provider :openstack do |openstack|
     openstack.openstack_auth_url  = configs['openstack']['openstack_auth_url']
@@ -77,9 +39,6 @@ Vagrant.configure("2") do |config|
     config.ssh.private_key_path = configs['openstack']['ssh']['private_key_path']
     openstack.keypair_name = configs['openstack']['keypair_name']
     openstack.networks = configs['openstack']['networks']
-
-
-
 
   end
 
