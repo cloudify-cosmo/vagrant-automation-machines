@@ -70,14 +70,14 @@ fi
 cd /vagrant
 echo "### Starting Xvfb ... ###"
 export DISPLAY=:10
+echo "export DISPLAY=:10" > /home/ubuntu/.bashrc
 sudo Xvfb :10 -screen 0 1366x768x24 -ac &
 
 # echo "### Starting Google Chrome ... ###"
 # sudo su -c "google-chrome --remote-debugging-port=9222 http://localhost:4444/wd/hub &" vagrant # need to start chrome with the vagrant user
 
 echo "### Starting Selenium ... ###"
-cd /usr/local/bin
-sudo nohup java -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver -jar selenium-server-standalone.jar -port 80&
+sudo nohup java -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver -jar /usr/local/bin/selenium-server-standalone.jar -port 80&
 
 # Print how long the bootstrap script took to run
 T="$(($(date +%s)-T))"
