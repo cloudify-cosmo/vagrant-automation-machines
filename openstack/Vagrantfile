@@ -7,7 +7,7 @@ require_relative '../util/util'
 CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!
 
 config = Util.new
-cloudname = 'openstack'
+cloudname = File.basename(Dir.getwd)
 configs = config.getConfigs(CONFIG_FILE, cloudname)
 
 environment_provision_script = config.initEnvironmentProvision(configs)
