@@ -2,48 +2,18 @@
 # vagrant plugin install vagrant-aws
 # vagrant up --provider=aws
 
+require_relative '../util/util'
 
+CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!
 
-require 'yaml'
-CONFIG_FILE = ENV['CONFIG_FILE'] # supports JSON!!!!
+config = Util.new
+cloudname = File.basename(Dir.getwd)
+configs = config.getConfigs(CONFIG_FILE, cloudname)
 
-unless CONFIG_FILE
-  abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
-end
+environment_provision_script = config.initEnvironmentProvision(configs)
 
-defaults = YAML.load_file("#{File.dirname(File.expand_path(__FILE__))}/defaults.json")
-configs = YAML.load_file("#{CONFIG_FILE}")
-
-# http://stackoverflow.com/a/9381776/1068746
-class ::Hash
-  def deep_merge(second)
-    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
-    self.merge(second, &merger)
-  end
-end
-
-
-configs = defaults.deep_merge(configs)
-
-environment_provision_script = "echo \""
-
-if configs.has_key?("environmentVariables")
-  configs['environmentVariables'].each { |k, v|  environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
-end
-
-environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
-
-#:rsync_excludes => ['chef/tmp', 'tmp']
 excludes_array = ['.git','_site']
-begin
-  excludes_array = IO.readlines("../synced_folder/.vagrantignore")
-  excludes_array.collect { |x| x.strip! }
-rescue
-  puts '.vagrantignore does not exist. moving on..'
-end
-puts "the following files will be ignored by rsync #{excludes_array}"
-puts "see https://docs.vagrantup.com/v2/synced-folders/rsync.html for recommended list of ignore items"
-
+config.setVagrantignore(excludes_array)
 
 Vagrant.configure("2") do |config|
 
