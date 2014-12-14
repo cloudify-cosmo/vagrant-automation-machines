@@ -25,7 +25,7 @@ class Util
 
     environment_provision_script = "echo \""
     if configs.has_key?("environmentVariables")
-      configs['environmentVariables'].each { |k, v| environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
+      configs['environmentVariables'].each { |k, v| environment_provision_script = environment_provision_script + "export #{k}=\\\"#{v}\\\";\n" }
     end
     environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
 
