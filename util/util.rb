@@ -28,7 +28,6 @@ class Util
       configs['environmentVariables'].each { |k, v| environment_provision_script = environment_provision_script + "#{k}=\\\"#{v}\\\";\n" }
     end
     environment_provision_script = environment_provision_script + "\" > /etc/ENVIRONMENT_VARIABLES.sh"
-    puts "this is environment provision script #{environment_provision_script}"
 
     return environment_provision_script
   end
