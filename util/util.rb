@@ -1,9 +1,10 @@
 require 'yaml'
 
+
 # http://stackoverflow.com/a/9381776/1068746
 class ::Hash
   def deep_merge(second)
-    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    merger = proc { |key, v1, v2| if Hash === v1 && Hash === v2 then v1.merge(v2, &merger) else v2 end}
     self.merge(second, &merger)
   end
 end
@@ -15,9 +16,13 @@ class Util
     unless configFile
       abort("\n\n\n\nMUST DEFINE VARIABLE `CONFIG_FILE` TO POINT TO JSON OR YAML CONFIGURATION. see `defaults.json` file for configuration example\n\n\n")
     end
+
     defaults = YAML.load_file("../"+cloudname+"/defaults.json")
     configs = YAML.load_file("#{configFile}")
+
     configs = defaults.deep_merge(configs)
+
+
     return configs
   end
 
