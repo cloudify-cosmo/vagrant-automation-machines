@@ -1,4 +1,5 @@
 # https://github.com/cloudbau/vagrant-openstack-plugin.git
+# export VAGRANT_HOME='/home/$USER/openstack.vagrant.d'
 # vagrant plugin install vagrant-openstack-provider
 # vagrant up --provider=openstack
 
