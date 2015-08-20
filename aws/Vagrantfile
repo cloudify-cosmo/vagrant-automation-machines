@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
 
     aws.region = configs['aws']['region']
     aws.instance_type = configs['aws']['instanceType']
-
+    aws.user_data = "#!/bin/bash\nsed -i -e 's/^Defaults.*requiretty/# Defaults requiretty/g' /etc/sudoers"
     aws.ami = configs['aws']['ami']
 
     aws.tags = {
