@@ -49,6 +49,8 @@ Vagrant.configure("2") do |config|
 
     override.ssh.username = configs['aws']['ssh']['username']
     override.ssh.private_key_path = configs['aws']['ssh']['privateKeyPath']
+    # http://stackoverflow.com/questions/33098913/vagrant-fails-to-get-machine-up-throwing-keep-getting-an-error-prompt-undef?noredirect=1#comment54025480_33098913
+    override.ssh.insert_key = false
 
 
   end
