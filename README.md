@@ -59,28 +59,11 @@ If you followed the instructions correctly, you should have the following folder
 Your automation should have the following steps
 
  - clone this repository
- - setup decrypted vagrant specific configuration file
+ - setup decrypted vagrant specific configuration file and set location to `CONFIG_FILE`
  - setup provision script and files under synced_folder
- - run more scripts before vagrant ( pre_vagrant_hook.sh )
- - run `vagrant up --provider hp/aws-ec2/softlayer` 
+ - run `vagrant up --provider hp/aws/...` 
     - work directory for this step should be set on the relevant folder
     - environment variable CONFIG_FILE should point to the decoded configuration file.
- - run more scripts after vagrant (post_vagrant_hook.sh )
-
-
-## Creating your own `before` and `after` vagrant hooks
-
-Sometimes there will be things you need to do right before vagrant runs, and things right after vagrant runs.
-
-**For example**
-
- - write a encryption key to synced_folder. as an example - lets assume it is called encrypt_key.sh and contains:
- ```
- ENCRYPT_KEY="__the encrypt key__"
- ```
- - since this file is in synced_folder, the provision script can reference it under /vagrant_data
- - the provision script can easily use this file to know how to encrypt/decrypt files by running `source /vagrant_data/encrypt_key.sh`
- - once vagrant is done, you will want to delete this key by simply running `rm -rf synced_folder/encrypt_key.sh`
 
 
 ## Environment Variables Feature
@@ -122,6 +105,20 @@ To support other environments, you can simply write
 source /etc/ENVIRONMENT_VARIABLES.sh || echo "no environment variables file.. skipping.. "
 ```
 
+### Using VAGRANT_ENV_ prefix
+
+We also auto-detect environment variables that start with `VAGRANT_ENV_` and auto inject them under the `environmentVariables` section in your `CONFIG_FILE`
+
+so running 
+
+```bash 
+
+export VAGRANT_ENV_VERSION="1.0.0"
+
+```
+
+would expose environment variable `VERSION` with value `1.0.0` in the guest machine. 
+
 ## How to copy files from guest to host
 
 Based on [this gist](https://gist.github.com/geedew/11289350) we wrote a script to copy files back from the guest machine to the host machine. You can run it simply by writing 
@@ -157,5 +154,3 @@ each line is a new entry for excludes.
 Good to know - our project makes it seamless on what provider you are running. While on AWS plugin
 the `excludes` parameter is different - but you don't have to worry about it.  [excludes with a single underscore character instead of two underscores like everyone else](https://github.com/mitchellh/vagrant-aws/issues/152)
 
-# Common provision scripts:
-We added a folder which contains common provision scenarios scripts, your'e welcome to use and contribute.
