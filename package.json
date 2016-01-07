@@ -11,7 +11,8 @@
     "url": "git+https://github.com/cloudify-cosmo/vagrant-automation-machines.git"
   },
   "bin": {
-    "vagrant-automation-machines-setup": "index.js"
+    "vagrant-automation-machines-setup": "index.js",
+    "vagrant-automation-machines-copy" : "copy_from_guest.sh"
   },
   "author": "",
   "license": "MIT",
