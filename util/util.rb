@@ -1,5 +1,6 @@
 require 'yaml'
 
+ENV_PREFIX='VAGRANT_ENV_'
 
 # http://stackoverflow.com/a/9381776/1068746
 class ::Hash
@@ -18,10 +19,14 @@ class Util
     end
 
     defaults = YAML.load_file("../"+cloudname+"/defaults.json")
+
+    ## allow to define environment variables that we will pass to
+    defaults['environmentVariables'] = ENV.select { | name | name.start_with?  ENV_PREFIX  }
+    defaults['environmentVariables'].keys.each { | k | defaults['environmentVariables'][ k[ENV_PREFIX.length, k.length-1]] = defaults['environmentVariables'][k]; defaults['environmentVariables'].delete(k); }
+
     configs = YAML.load_file("#{configFile}")
 
     configs = defaults.deep_merge(configs)
-
 
     return configs
   end
