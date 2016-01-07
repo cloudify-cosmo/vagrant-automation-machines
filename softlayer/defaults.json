@@ -1,7 +1,0 @@
-{
-    "softlayer" : {
-        "apiKey" : "__apiKey__",
-        "username" : "__username__",
-        "sshKey" : "__sshKey__"
-    }
-}
