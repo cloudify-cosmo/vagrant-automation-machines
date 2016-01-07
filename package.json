@@ -1,0 +1,25 @@
+{
+  "name": "vagrant-automation-machines",
+  "version": "1.0.0",
+  "description": "collection of vagrantfiles ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudify-cosmo/vagrant-automation-machines.git"
+  },
+  "bin": {
+    "vagrant-automation-machines-setup": "index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cloudify-cosmo/vagrant-automation-machines/issues"
+  },
+  "homepage": "https://github.com/cloudify-cosmo/vagrant-automation-machines#readme",
+  "dependencies": {
+    "fs-extra": "^0.26.4"
+  }
+}
