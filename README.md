@@ -157,11 +157,13 @@ the `excludes` parameter is different - but you don't have to worry about it.  [
 
 # nodejs support
 
-you can use this project as a command line like so
+you can install this project globally with npm with `npm install -g cloudify-cosmo/vagrant-automation-machines`
 
+and this will expose some useful command lines. 
+
+## setup command
 
 ```bash 
-npm install -g cloudify-cosmo/vagrant-automation-machines
 
 pushd folder_with_provision_script_and_synced_folder
     vagrant-automation-machines-setup aws
@@ -169,11 +171,24 @@ pushd folder_with_provision_script_and_synced_folder
         vagrant up --provider aws
     popd
 popd
+
 ```
 
-Basically, our command line support helps you setup your environment by copying the necessary configurations to your folder. 
-
 The example above will copy directory `aws` and `util` which are necessary if you want to spin up a machine in aws-ec2. 
+
+
+## copy from guest
+
+this command assumes you have the vagrant-scp plugin installed. if it is not it will print an error. 
+
+```bash
+
+pushd folder_to_copy_to
+    rm -rf reports # cleanup
+    vagrant-automation-machines-copy reports # copy reports from guest to here.. 
+popd
+
+```
 
 
 # Cleanup Best Practice
@@ -195,3 +210,4 @@ vagrant up --provider=aws
 ```
 
 This will make sure vagrant machine is destroyed before your script exits. 
+
