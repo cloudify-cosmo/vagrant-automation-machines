@@ -8,9 +8,10 @@ a boiler plate for automations relying on vagrant. simply clone and add files to
  - support for aws, hp, docker, softlayer
  - synced folder - from host to guest machine
  - external configuration
- - environment variables support
+ - environment variables support with auto-detection
  - copy files from guest to host
  - ip resolution
+ - nodejs support
 
 
 
@@ -154,3 +155,22 @@ each line is a new entry for excludes.
 Good to know - our project makes it seamless on what provider you are running. While on AWS plugin
 the `excludes` parameter is different - but you don't have to worry about it.  [excludes with a single underscore character instead of two underscores like everyone else](https://github.com/mitchellh/vagrant-aws/issues/152)
 
+# nodejs support
+
+you can use this project as a command line like so
+
+
+```bash 
+npm install -g cloudify-cosmo/vagrant-automation-machines
+
+pushd folder_with_provision_script_and_synced_folder
+    vagrant-automation-machines-setup aws
+    push aws
+        vagrant up --provider aws
+    popd
+popd
+```
+
+Basically, our command line support helps you setup your environment by copying the necessary configurations to your folder. 
+
+The example above will copy directory `aws` and `util` which are necessary if you want to spin up a machine in aws-ec2. 
