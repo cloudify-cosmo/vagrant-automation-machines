@@ -174,3 +174,24 @@ popd
 Basically, our command line support helps you setup your environment by copying the necessary configurations to your folder. 
 
 The example above will copy directory `aws` and `util` which are necessary if you want to spin up a machine in aws-ec2. 
+
+
+# Cleanup Best Practice
+
+We found the easiest way to cleanup the environment in an automation was to use `trap` command in bash. 
+
+For example: 
+
+```bash
+
+function cleanup(){
+    vagrant destroy -f 
+}
+
+trap cleanup EXIT
+
+vagrant up --provider=aws
+
+```
+
+This will make sure vagrant machine is destroyed before your script exits. 
