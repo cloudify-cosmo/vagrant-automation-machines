@@ -1,0 +1,11 @@
+{
+  "managed" : {
+    "server" : "__server__",
+    "ssh" : {
+      "username" : "ubuntu",
+      "privateKeyPath" : "/etc/automations/managedAutomationKeypair"
+    }
+
+
+  }
+}
