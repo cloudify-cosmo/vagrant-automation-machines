@@ -118,7 +118,21 @@ export VAGRANT_ENV_VERSION="1.0.0"
 
 ```
 
-would expose environment variable `VERSION` with value `1.0.0` in the guest machine. 
+would expose environment variable `VERSION` with value `1.0.0` in the guest machine.
+
+## Environment Variables Feature Option 2
+When installing vagrant-automation-machines with npm, you can use ```vagrant-automation-machines-setup``` command which copies the vagrantfile of a specific cloud.
+This command expect 2 arguments:
+--cloud / -c ===> (string) representing the cloud directory to copy
+--args / -a ===> (array) representing the list of arguments to inject to the vagrantfile that will be available in the provision script.
+
+args command edits the vagrantfile to add the arguments after copying it.
+
+example: ```vagrant-automation-machines-setup --cloud aws --args Arg1 Arg2 Arg3```
+
+Make sure the arguments are declared as environment variables before running 'vagrant up'.
+
+The arguments will be injected by vagrant args feature, and will be accessed by $ variables, where $1 = Arg1 ; $2 =Arg2 ; $3 = Arg3...
 
 ## How to copy files from guest to host
 
@@ -166,7 +180,7 @@ and this will expose some useful command lines.
 ```bash 
 
 pushd folder_with_provision_script_and_synced_folder
-    vagrant-automation-machines-setup aws
+    vagrant-automation-machines-setup --cloud aws
     push aws
         vagrant up --provider aws
     popd

@@ -12,7 +12,7 @@
   },
   "bin": {
     "vagrant-automation-machines-setup": "index.js",
-    "vagrant-automation-machines-copy" : "copy_from_guest.sh"
+    "vagrant-automation-machines-copy": "copy_from_guest.sh"
   },
   "author": "",
   "license": "MIT",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/cloudify-cosmo/vagrant-automation-machines#readme",
   "dependencies": {
-    "fs-extra": "^0.26.4"
+    "fs-extra": "^0.26.4",
+    "yargs": "^4.3.2"
   }
 }
