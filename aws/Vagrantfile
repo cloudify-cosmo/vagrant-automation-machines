@@ -34,8 +34,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :aws do |aws, override|
     aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 50 }]
-    aws.access_key_id = configs['aws']['accessKey']
-    aws.secret_access_key = configs['aws']['secretAccessKey']
+    aws.access_key_id = S3_ACCESS_KEY
+    aws.secret_access_key = S3_SECRET_KEY
     aws.keypair_name = configs['aws']['keypairName']
 
     aws.region = configs['aws']['region']

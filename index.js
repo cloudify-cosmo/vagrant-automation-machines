@@ -11,6 +11,10 @@ var argv = require('yargs')
         alias: 'a',
         type: 'array'
     })
+    .option('locals', {
+        alias: 'l',
+        type: 'array'
+    })
     .argv;
 
 //validating arguments
@@ -21,6 +25,7 @@ if( !argv.cloud || typeof argv.cloud !== 'string' ){
 
 var cloud = argv.cloud;
 var args = argv.args;
+var locals = argv.locals;
 var to = process.cwd();
 var from = path.resolve(__dirname);
 
@@ -34,9 +39,8 @@ copyFolders.forEach(function(c){
    fs.copySync( path.join(from,c) , path.join(to,c) );
 });
 
-//add args to vagrantfile
-if(args && args.length > 0){
-    var vagrantfile = path.join(to,cloud,'/Vagrantfile');
+if(locals || args) {
+    var vagrantfile = path.join(to, cloud, '/Vagrantfile');
 
     var body = fs.readFileSync(vagrantfile).toString();
     var lines = body.split('\n');
@@ -44,42 +48,59 @@ if(args && args.length > 0){
 
     var configFileDeclaration = "CONFIG_FILE = ENV['CONFIG_FILE']";
 
-    function appendAfter (lines, search, append) {
-        for(var i = 0 ; i < lines.length; i++){
+    function appendAfter(lines, search, append) {
+        for (var i = 0; i < lines.length; i++) {
             var index = lines[i].indexOf(search);
-            if(index !== -1){
+            if (index !== -1) {
                 //index is count of whitespaces for indentation
-                append = Array(index+1).join(" ")+append;
-                lines.splice(i+1,0,append);
+                append = Array(index + 1).join(" ") + append;
+                lines.splice(i + 1, 0, append);
                 appended = true;
                 break;
             }
         }
     }
 
-    function declareVariable(variable){
-        var argDeclaration = variable+" = ENV['"+variable+"']";
+    function declareVariable(variable) {
+        var argDeclaration = variable + " = ENV['" + variable + "']";
         appendAfter(lines, configFileDeclaration, argDeclaration);
     }
 
-    for(var i=0; i<args.length; i++){
-        declareVariable(args[i]);
+
+    //declare locals
+    if (locals && locals.length > 0) {
+        for (var i = 0; i < locals.length; i++) {
+            declareVariable(locals[i]);
+        }
     }
 
-    (function declareArgs(args){
-        var provisionScriptDeclaration = "s.path = \"../provision.sh\"";
-        var argsString = "";
-        args.forEach(function(arg){
-            argsString += argsString === "" ? "" : " ";
-            argsString += "#{"+arg+"}"
-        });
-        var provisionArgsDeclaration = "s.args = \""+argsString+"\"";
+    //add args to vagrantfile
+    if (args && args.length > 0) {
 
-        appendAfter(lines, provisionScriptDeclaration, provisionArgsDeclaration);
-    })(args);
+        function hasNotBeenDeclared(variable) {
+            return !locals || locals.indexOf(variable) === -1
+        }
 
+        for (var i = 0; i < args.length; i++) {
+            if (hasNotBeenDeclared(args[i])) {
+                declareVariable(args[i]);
+            }
+        }
 
-    if(appended){
+        (function declareArgs(args) {
+            var provisionScriptDeclaration = "s.path = \"../provision.sh\"";
+            var argsString = "";
+            args.forEach(function (arg) {
+                argsString += argsString === "" ? "" : " ";
+                argsString += "#{" + arg + "}"
+            });
+            var provisionArgsDeclaration = "s.args = \"" + argsString + "\"";
+
+            appendAfter(lines, provisionScriptDeclaration, provisionArgsDeclaration);
+        })(args);
+    }
+
+    if (appended) {
         body = lines.join('\n');
         fs.writeFileSync(vagrantfile, body);
     }
